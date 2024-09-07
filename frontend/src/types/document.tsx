@@ -3,6 +3,7 @@ import { DocumentColorEnum } from "~/utils/colors";
 export enum DocumentType {
   TenK = "Form 10K",
   TenQ = "Form 10Q",
+  FinancialStatements = "Consolidated Financial Statements",
 }
 
 export type Ticker = {

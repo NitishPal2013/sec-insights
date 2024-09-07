@@ -30,7 +30,8 @@ export const TitleAndDropdown = () => {
   const handleSubmit = (event: { preventDefault: () => void }) => {
     setIsLoadingConversation(true);
     event.preventDefault();
-    const selectedDocumentIds = selectedDocuments.map((val) => val.id);
+    // const selectedDocumentIds = selectedDocuments.map((val) => val.id);
+    const selectedDocumentIds = ["b241dc37-4e22-41a3-b6c7-0fb72377da67"];
     backendClient
       .createConversation(selectedDocumentIds)
       .then((newConversationId) => {
@@ -265,6 +266,16 @@ export const TitleAndDropdown = () => {
                       </>
                     )}
                   </div>
+                </button>
+                <button
+                onClick={handleSubmit}
+                className={cx(
+                  "m-4 rounded border bg-llama-indigo px-6 py-2 font-nunito text-white hover:bg-[#3B3775] disabled:bg-gray-30 ",
+                  !isStartConversationButtonEnabled &&
+                    "border-gray-300 bg-gray-300"
+                )}
+                >
+                  Start Conversation
                 </button>
               </div>
             </div>

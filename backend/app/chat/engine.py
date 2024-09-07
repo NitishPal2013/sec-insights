@@ -295,18 +295,7 @@ async def get_chat_engine(
             metadata=ToolMetadata(
                 name="qualitative_question_engine",
                 description="""
-A query engine that can answer qualitative questions about a set of SEC financial documents that the user pre-selected for the conversation.
-Any questions about company-related headwinds, tailwinds, risks, sentiments, or administrative information should be asked here.
-""".strip(),
-            ),
-        ),
-        QueryEngineTool(
-            query_engine=quantitative_question_engine,
-            metadata=ToolMetadata(
-                name="quantitative_question_engine",
-                description="""
-A query engine that can answer quantitative questions about a set of SEC financial documents that the user pre-selected for the conversation.
-Any questions about company-related financials or other metrics should be asked here.
+A query engine that can answer any questions about financial document of Emaar Properties. 
 """.strip(),
             ),
         ),
@@ -327,7 +316,7 @@ Any questions about company-related financials or other metrics should be asked 
             "- " + build_title_for_document(doc) for doc in conversation.documents
         )
     else:
-        doc_titles = "No documents selected."
+        doc_titles = "Emaar Properties PJSC and its Subsidiaries UNAUDITED INTERIM CONDENSED CONSOLIDATED FINANCIAL STATEMENTS FOR THE PERIOD ENDED 31 MARCH 2024 "
 
     curr_date = datetime.utcnow().strftime("%Y-%m-%d")
     chat_engine = OpenAIAgent.from_tools(

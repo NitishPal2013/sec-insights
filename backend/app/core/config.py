@@ -53,7 +53,6 @@ class PreviewPrefixedSettings(BaseSettings):
     OPENAI_API_KEY: str
     AWS_KEY: str
     AWS_SECRET: str
-    POLYGON_IO_API_KEY: str
 
     class Config(AppConfig):
         env_prefix = "PREVIEW_" if is_pull_request or is_preview_env else ""
@@ -66,18 +65,18 @@ class Settings(PreviewPrefixedSettings):
 
     PROJECT_NAME: str = "llama_app"
     API_PREFIX: str = "/api"
-    DATABASE_URL: str
+    DATABASE_URL: Optional[str] = None
     LOG_LEVEL: str = "DEBUG"
     IS_PULL_REQUEST: bool = False
     RENDER: bool = False
     CODESPACES: bool = False
-    CODESPACE_NAME: Optional[str]
-    S3_BUCKET_NAME: str
-    S3_ASSET_BUCKET_NAME: str
-    CDN_BASE_URL: str
+    CODESPACE_NAME: Optional[str] = None
+    S3_BUCKET_NAME: Optional[str] = None
+    S3_ASSET_BUCKET_NAME: Optional[str] = None
+    CDN_BASE_URL: Optional[str] = None
     VECTOR_STORE_TABLE_NAME: str = "pg_vector_store"
-    SENTRY_DSN: Optional[str]
-    RENDER_GIT_COMMIT: Optional[str]
+    SENTRY_DSN: Optional[str] = None
+    RENDER_GIT_COMMIT: Optional[str] = None
     LOADER_IO_VERIFICATION_STR: str = "loaderio-e51043c635e0f4656473d3570ae5d9ec"
     SEC_EDGAR_COMPANY_NAME: str = "YourOrgName"
     SEC_EDGAR_EMAIL: EmailStr = "you@example.com"
@@ -111,15 +110,18 @@ class Settings(PreviewPrefixedSettings):
         raise ValueError(v)
 
     @validator("DATABASE_URL", pre=True)
-    def assemble_db_url(cls, v: str) -> str:
+    def assemble_db_url(cls, v: Optional[str]) -> Optional[str]:
         """Preprocesses the database URL to make it compatible with asyncpg."""
-        if not v or not v.startswith("postgres"):
+        if not v:
+            return None
+        if not v.startswith("postgres"):
             raise ValueError("Invalid database URL: " + str(v))
-        return (
-            v.replace("postgres://", "postgresql://")
-            .replace("postgresql://", "postgresql+asyncpg://")
-            .strip()
-        )
+        
+        # Remove the asyncpg addition if it's already there
+        v = v.replace("postgresql+asyncpg://", "postgresql://")
+        
+        # Now add the asyncpg prefix
+        return v.replace("postgresql://", "postgresql+asyncpg://").strip()
 
     @validator("LOG_LEVEL", pre=True)
     def assemble_log_level(cls, v: str) -> str:

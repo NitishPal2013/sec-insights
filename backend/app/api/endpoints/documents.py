@@ -32,6 +32,28 @@ async def get_documents(
 
     return docs
 
+from app.schema import Document
+from app.api.crud import upsert_document_by_url
+from app.db.session import SessionLocal
+
+
+@router.post("/upsert")
+async def upsert_document(url: str) -> UUID:
+    """
+    Upsert a document by URL
+    """
+    doc = Document(url=url, metadata_map={})
+    
+    try:
+        async with SessionLocal() as db:
+            document = await upsert_document_by_url(db, doc)
+            print(f"Upserted document. Database ID:\n{document.id}")
+            return document.id
+    except Exception as e:
+        logger.error(f"Error upserting document: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error upserting document")
+
+
 
 @router.get("/{document_id}")
 async def get_document(

@@ -17,6 +17,7 @@ import { BsArrowUpCircle } from "react-icons/bs";
 import { useModal } from "~/hooks/utils/useModal";
 import { useIntercom } from "react-use-intercom";
 import useIsMobile from "~/hooks/utils/useIsMobile";
+import { DocumentColorEnum } from "~/utils/colors";
 
 export default function Conversation() {
   const router = useRouter();
@@ -56,6 +57,20 @@ export default function Conversation() {
       }
       if (result.documents) {
         setSelectedDocuments(result.documents);
+        setSelectedDocuments(
+          [
+            {
+              id: "b241dc37-4e22-41a3-b6c7-0fb72377da67",
+              url: "https://76e495bd26851ec76037f5fa316a8ec0.cdn.bubble.io/f1725691570306x215574375121263780/Emaar%20Properties%20PJSC_31%20March%202024_Consolidated%20English%20FS.pdf",
+              year: 2024,
+              quarter: "Q1",
+              docType: "Consolidated Financial Statements",
+              color: DocumentColorEnum.purple,
+              ticker: "EMAAR",
+              fullName: "Emaar Properties PJSC",
+            },
+          ]
+        );
       }
     };
     if (conversationId) {
